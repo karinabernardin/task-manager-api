@@ -28,19 +28,19 @@ app.get('/users', (req, res) => {
     User.find({}).then((users) => {
         res.send(users);
     }).catch((error) => {
-        res.status(400).send(error);
+        res.status(500).send();
     });
 });
 
 app.get('/users/:id', (req, res) => {
     User.findById(req.params.id).then((user) => {
         if (!user) {
-            res.send('The email ' + req.params.email + ' is not registered.');
-        } else {
-            res.send(user);
-        }
+            return res.status(404).send('There is not an user corresponding to id ' + req.params.id);
+        } 
+
+        res.send(user);
     }).catch((error) => {
-        res.status(400).send(error);
+        res.status(500).send();
     });
 });
 
@@ -77,18 +77,18 @@ app.get('/tasks', (req, res) => {
     Task.find({}).then((tasks) => {
         res.send(tasks);
     }).catch((error) => {
-        res.status(400).send(error);
+        res.status(500).send();
     });
 });
 
 app.get('/tasks/:id', (req, res) => {
     Task.findById(req.params.id).then((task) => {
         if (!task) {
-            res.send('There is not a task correnponding to id ' + req.params.id);
-        } else {
-            res.send(task);
+            return res.status(404).send('There is not a task corresponding to id ' + req.params.id);
         }
+
+        res.send(task);
     }).catch((error) => {
-        res.status(400).send(error);
+        res.status(500).send();
     });
 });

@@ -12,5 +12,20 @@ body: {
 }
 ```
 
+GET http://localhost:3000/users
+
+GET http://localhost:3000/users/:id
+
+POST http://localhost:3000/tasks
+
+```
+body: {
+    "description": "Finish course"
+}
+```
+
+GET http://localhost:3000/tasks
+
+GET http://localhost:3000/tasks/:id
 
 
