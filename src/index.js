@@ -15,80 +15,64 @@ app.listen(port, ()=> {
 });
 
 
-app.post('/users', (req, res) => {
+app.post('/users', async (req, res) => {
     const user = new User(req.body);
-    user.save().then(() => {
+    try {
+        await user.save();
         res.send(user);
-    }).catch((error) => {
+    } catch (error) {
         res.status(400).send(error);
-    });
+    }
 });
 
-app.get('/users', (req, res) => {
-    User.find({}).then((users) => {
-        res.send(users);
-    }).catch((error) => {
+app.get('/users', async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.send(users);;
+    } catch (error) {
         res.status(500).send();
-    });
+    }
 });
 
-app.get('/users/:id', (req, res) => {
-    User.findById(req.params.id).then((user) => {
+app.get('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
         if (!user) {
             return res.status(404).send('There is not an user corresponding to id ' + req.params.id);
         } 
-
         res.send(user);
-    }).catch((error) => {
+    } catch (error) {
         res.status(500).send();
-    });
+    }
 });
 
-/* app.get('/users/:email', (req, res) => {
-    User.findOne({email: req.params.email}).then((user) => {
-        if (!user) {
-            res.send('The email ' + req.params.email + ' is not registered.');
-        } else {
-            res.send(user);
-        }
-    }).catch((error) => {
-        res.status(400).send(error);
-    });
-}); */
-
-app.patch('/users/:id', (req, res) => {
-    User.updateOne({_id: req.params.id}).then(() => {
-
-    }).catch((error) => {
-        res.status(400).send(error);
-    });
-});
-
-app.post('/tasks', (req, res) => {
+app.post('/tasks', async (req, res) => {
     const task = new Task(req.body);
-    task.save().then(() => {
+    try {
+        await task.save();
         res.send(task);
-    }).catch((error) => {
+    } catch (error) {
         res.status(400).send(error);
-    });
+    }
 });
 
-app.get('/tasks', (req, res) => {
-    Task.find({}).then((tasks) => {
+app.get('/tasks', async (req, res) => {
+    try {
+        const tasks = await Task.find({});
         res.send(tasks);
-    }).catch((error) => {
+    } catch (error) {
         res.status(500).send();
-    });
+    }
 });
 
-app.get('/tasks/:id', (req, res) => {
-    Task.findById(req.params.id).then((task) => {
+app.get('/tasks/:id', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
         if (!task) {
             return res.status(404).send('There is not a task corresponding to id ' + req.params.id);
         }
-
         res.send(task);
-    }).catch((error) => {
+    } catch (error) {
         res.status(500).send();
-    });
+    }
 });
