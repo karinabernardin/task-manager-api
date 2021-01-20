@@ -2,7 +2,7 @@
 
 #### dev:
 
-POST http://localhost:3000/users
+POST /users
 
 ```
 body: {
@@ -12,11 +12,22 @@ body: {
 }
 ```
 
-GET http://localhost:3000/users
+GET /users
 
-GET http://localhost:3000/users/:id
+GET /users/:id
 
-POST http://localhost:3000/tasks
+PATCH /users/:id
+
+```
+body: {
+   "name": "Karina",
+   "password": "54141543545871" 
+}
+```
+
+DELETE /users/:id
+
+POST/tasks
 
 ```
 body: {
@@ -24,8 +35,15 @@ body: {
 }
 ```
 
-GET http://localhost:3000/tasks
+GET /tasks
 
-GET http://localhost:3000/tasks/:id
+GET /tasks/:id
 
+PATCH /tasks/:id
 
+```
+body: {
+   "completed": true,
+}
+
+DELETE /tasks/:id
