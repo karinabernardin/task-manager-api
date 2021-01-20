@@ -46,6 +46,29 @@ app.get('/users/:id', async (req, res) => {
     }
 });
 
+app.patch('/users/:id', async (req, res) => {
+    const paramsThatShouldBeUpdated = ['name', 'password'];
+    const paramsFromRequest = Object.keys(req.body);
+
+    const shouldUpdateDocument = paramsFromRequest.every((parameter) => paramsThatShouldBeUpdated.includes(parameter));
+
+    if (!shouldUpdateDocument) {
+        return res.status(400).send('Some of the input parameters can not be updated.');
+    }
+
+    try {
+        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false }); // {useFindAndModify: false} : avoid deprecation warning
+
+        if (!updatedUser) {
+            return res.status(404).send('User with id ' + req.params.id + ' could not be found.');
+        }
+
+        res.send(updatedUser)
+    } catch (error) {
+        res.status(400).send();
+    }
+});
+
 app.post('/tasks', async (req, res) => {
     const task = new Task(req.body);
     try {
@@ -74,5 +97,28 @@ app.get('/tasks/:id', async (req, res) => {
         res.send(task);
     } catch (error) {
         res.status(500).send();
+    }
+});
+
+app.patch('/tasks/:id', async (req, res) => {
+    const paramsThatShouldBeUpdated = ['completed'];
+    const paramsFromRequest = Object.keys(req.body);
+
+    const shouldUpdateDocument = paramsFromRequest.every((parameter) => paramsThatShouldBeUpdated.includes(parameter));
+
+    if (!shouldUpdateDocument) {
+        return res.status(400).send('Some of the input parameters can not be updated.');
+    }
+
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false }); // {useFindAndModify: false} : avoid deprecation warning
+
+        if (!updatedTask) {
+            return res.status(404).send('Task with id ' + req.params.id + ' could not be found.');
+        }
+
+        res.send(updatedTask);
+    } catch (error) {
+        res.status(400).send();
     }
 });
