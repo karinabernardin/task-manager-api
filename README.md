@@ -27,7 +27,7 @@ body: {
 
 DELETE /users/:id
 
-POST/tasks
+POST /tasks
 
 ```
 body: {
@@ -45,5 +45,6 @@ PATCH /tasks/:id
 body: {
    "completed": true,
 }
+```
 
 DELETE /tasks/:id
