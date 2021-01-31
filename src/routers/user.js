@@ -1,5 +1,6 @@
 const express = require('express');
 const User = require('../models/user');
+const auth = require('../middleware/auth');
 
 const router = new express.Router();
 
@@ -8,19 +9,25 @@ router.post('/users', async (req, res) => {
     const user = new User(req.body);
     try {
         await user.save();
+        const token = user.generateAuthToken();
         res.send(user);
     } catch (error) {
         res.status(400).send(error);
     }
 });
 
-router.get('/users', async (req, res) => {
+router.post('/users/login', async (req, res) => {
     try {
-        const users = await User.find({});
-        res.send(users);
+        const user = await User.findByCredentials(req.body.email, req.body.password);
+        const token = await user.generateAuthToken();
+        res.send({ user, token});
     } catch (error) {
-        res.status(500).send();
+        res.status(400).send({error: error.toString() })
     }
+});
+
+router.get('/users/me', auth, async (req, res) => {
+    res.send(req.user);
 });
 
 router.get('/users/:id', async (req, res) => {
@@ -46,7 +53,9 @@ router.patch('/users/:id', async (req, res) => {
     }
 
     try {
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, useFindAndModify: false, runValidators: true }); // {useFindAndModify: false} : avoid deprecation warning
+        const user = await User.findById(req.params.id);
+        paramsFromRequest.forEach((param) => user[param] = req.body[param]);
+        user.save();
 
         if (!updatedUser) {
             return res.status(404).send({error: 'User with id ' + req.params.id + ' could not be found.'});

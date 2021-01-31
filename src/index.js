@@ -8,6 +8,12 @@ const port = process.env.PORT || 3000;
 
 establishDatabaseConnection('task-manager-api');
 
+// middleware used for site maintenance. next() is not called
+// used for every route in the application
+//app.use((req, res, next) => {
+//    res.status(503).send('Site is currently down. Check back soon!');
+//});
+
 app.use(express.json());
 app.use(userRouter);
 app.use(taskRouter);

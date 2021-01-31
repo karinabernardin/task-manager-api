@@ -12,7 +12,16 @@ body: {
 }
 ```
 
-GET /users
+POST users/login
+
+```
+body: {
+   "email": "karinabernardin@gmail.com",
+   "password": "1j26d8d9esl" 
+}
+```
+
+GET /users/me
 
 GET /users/:id
 
