@@ -54,14 +54,15 @@ router.patch('/users/:id', async (req, res) => {
 
     try {
         const user = await User.findById(req.params.id);
-        paramsFromRequest.forEach((param) => user[param] = req.body[param]);
-        user.save();
-
-        if (!updatedUser) {
+        
+        if (!user) {
             return res.status(404).send({error: 'User with id ' + req.params.id + ' could not be found.'});
         }
 
-        res.send(updatedUser);
+        paramsFromRequest.forEach((param) => user[param] = req.body[param]);
+        user.save();
+
+        res.send(user);
     } catch (error) {
         res.status(400).send(error);
     }
